@@ -6,7 +6,7 @@ import Web3ReactManager from "@/components/Web3ReactManager/index";
 import { NetworkContextName } from "@/config";
 
 import Home from "@/page/Home";
-
+import Header from "@/components/Header/index";
 export function getLibrary(provider: any): Web3Provider {
     const library = new Web3Provider(provider);
     library.pollingInterval = 15000;
@@ -19,6 +19,8 @@ function App() {
         <Web3ReactProvider getLibrary={getLibrary}>
             <Web3ProviderNetwork getLibrary={getLibrary}>
                 <Router>
+                    <Header></Header>
+
                     <Web3ReactManager>
                         <Route path="/" exact component={Home} />
                     </Web3ReactManager>
