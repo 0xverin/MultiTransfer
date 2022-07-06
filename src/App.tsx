@@ -5,7 +5,7 @@ import Web3ReactManager from "@/components/Web3ReactManager/index";
 
 import { NetworkContextName } from "@/config";
 
-import Home from "@/page/Home";
+import Home from "@/view/Home";
 import Header from "@/components/Header/index";
 export function getLibrary(provider: any): Web3Provider {
     const library = new Web3Provider(provider);
