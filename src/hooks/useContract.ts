@@ -2,20 +2,23 @@ import { useMemo } from "react";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { AddressZero } from "@ethersproject/constants";
-import { isAddress } from "@/utils/isAddress";
+import { getAddress, isAddress } from "@ethersproject/address";
 import { getProviderOrSigner } from "@/utils";
 import { Contract } from "@ethersproject/contracts";
-
+import erc20Api from "@/config/abi/erc20.json";
 // export const useExampleContract = (address: string, withSignerIfPossible = true) => {
 //   return useContract(address, ContractAbi, withSignerIfPossible);
 // };
 
 // Multiple chains
-
 // export const useBatchTransfer = (withSignerIfPossible?: boolean) => {
 //   const { chainId } = useActiveWeb3React();
 //   return useContract(getContractAddress(chainId), ContractAbi, withSignerIfPossible);
 // };
+
+export const useERC20 = (address: string, withSignerIfPossible = true) => {
+    return useContract(address, erc20Api, withSignerIfPossible);
+};
 
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
     const { library, account } = useActiveWeb3React();

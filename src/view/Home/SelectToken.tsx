@@ -5,14 +5,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 interface propsInter {
     tokenList: Array<any>;
-    searchValue: string;
     onInChange: (value: any) => void;
     onEventChange: (value: any) => void;
+    open: boolean;
 }
 
 export default function SelectToken(props: propsInter) {
-    const { tokenList, searchValue, onInChange, onEventChange } = props;
-    const [open, setOpen] = useState(false);
+    const { tokenList, onInChange, onEventChange, open } = props;
+
     const [options, setOptions] = useState<any>([]);
     const loading = open && options.length === 0;
 
