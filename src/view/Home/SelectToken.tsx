@@ -62,5 +62,3 @@ export default function SelectToken(props: propsInter) {
         </div>
     );
 }
-// Top films as rated by IMDb users. http://www.imdb.com/chart/top
-const topFilms = [{ title: "The Shawshank Redemption", year: 1994 }];
