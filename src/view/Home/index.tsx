@@ -65,8 +65,31 @@ export default function Home() {
     const onSetAddressListChange = (value: any) => {
         setAddresslist(value);
     };
+
+    const errAddressList = useMemo(() => {
+        const err: { address: string; index: number }[] = [];
+        addressList.forEach((item, index) => {
+            if (isAddress(item) !== item && item !== "") {
+                err.push({ address: item, index });
+            }
+        });
+        return err.length ? (
+            <div className="border rounded-md border-red-500 text-red-500 mt-4 border-1 border-solid px-5 py-5 leading-7">
+                {err.map((item) => {
+                    return (
+                        <div key={item.index} className="">
+                            <div>
+                                第{item.index + 1}行 {item.address} 不是一个有效的钱包地址
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        ) : null;
+    }, [addressList]);
+
     return (
-        <div className="w-11/12 min-h-[500px] shadow-[0_0_10px_0_rgba(0,0,0,0.25)] m-auto mt-20 rounded-2xl mb-20 lg:w-7/12">
+        <div className="w-11/12 pb-5 min-h-[500px] shadow-[0_0_10px_0_rgba(0,0,0,0.25)] m-auto mt-20 rounded-2xl mb-20 lg:w-7/12">
             <div className="text-[#031a6e] text-[18px] font-bold text-center pt-5">批量发送代币</div>
 
             <div className="mt-10 pl-10 pr-10">
@@ -85,6 +108,7 @@ export default function Home() {
                     addressList={addressList}
                 ></AddressList>
             </div>
+            <div className="pl-10 pr-10 my-5">{errAddressList}</div>
 
             <div className="pl-10 pr-10 text-right flex items-center">
                 <div className="w-3/5  flex items-center">
@@ -103,7 +127,7 @@ export default function Home() {
                     </div>
                 </div>
                 <div
-                    className="w-2/5 text-gray-500 text-[14px] hover:cursor-pointer"
+                    className="w-2/5 text-gray-500 text-[14px]  hover:cursor-pointer"
                     onClick={() => {
                         onSetAddressChange(
                             "0x731c3A53D26487Ea8c9768863CC98BEeaC666666\n0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
