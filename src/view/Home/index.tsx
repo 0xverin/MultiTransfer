@@ -5,7 +5,7 @@ import { Erc20 } from "@/config/abi/types";
 import { isAddress } from "@/utils/isAddress";
 import SelectToken from "./SelectToken";
 import AddressList from "./AddressList";
-
+import TextField from "@mui/material/TextField";
 import { Token } from "@/config/constants/types";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
     const [searchValue, setSearchValue] = useState("");
     const [addressValue, setAddressValue] = useState("");
     const [addressList, setAddresslist] = useState<string[]>([]);
-
+    const [sendValue, setSendValue] = useState("1");
     const [selectObject, setSelectObject] = useState<Token>({
         address: "",
         name: "",
@@ -84,6 +84,38 @@ export default function Home() {
                     onSetAddressListChange={onSetAddressListChange}
                     addressList={addressList}
                 ></AddressList>
+            </div>
+
+            <div className="pl-10 pr-10 text-right flex items-center">
+                <div className="w-3/5  flex items-center">
+                    <div className="text-[14px]">每个地址发送：</div>
+                    <div className="ml-2">
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            className="w-24"
+                            size="small"
+                            value={sendValue}
+                            onChange={(e) => {
+                                setSendValue(e.target.value);
+                            }}
+                        />
+                    </div>
+                </div>
+                <div
+                    className="w-2/5 text-gray-500 text-[14px] hover:cursor-pointer"
+                    onClick={() => {
+                        onSetAddressChange(
+                            "0x731c3A53D26487Ea8c9768863CC98BEeaC666666\n0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
+                        );
+                        onSetAddressListChange([
+                            "0x731c3A53D26487Ea8c9768863CC98BEeaC666666",
+                            "0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
+                        ]);
+                    }}
+                >
+                    查看例子
+                </div>
             </div>
         </div>
     );

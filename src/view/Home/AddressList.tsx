@@ -9,7 +9,7 @@ interface propsInter {
 }
 export default function AddressList(props: propsInter) {
     const { onSetAddressChange, addressValue, onSetAddressListChange, addressList } = props;
-
+    console.log(addressValue);
     return (
         <div>
             <div className="text-[#031a6e] text-[16px]">收币地址</div>
@@ -26,6 +26,7 @@ export default function AddressList(props: propsInter) {
                         id="standard-multiline-static"
                         variant="standard"
                         multiline
+                        value={addressValue}
                         minRows={8}
                         onChange={(e) => {
                             onSetAddressChange(e.target.value);

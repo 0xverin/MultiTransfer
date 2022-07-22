@@ -12,7 +12,6 @@ interface propsInter {
 
 export default function SelectToken(props: propsInter) {
     const { tokenList, onInChange, onEventChange, open } = props;
-
     const [options, setOptions] = useState<any>([]);
     const loading = open && options.length === 0;
 
