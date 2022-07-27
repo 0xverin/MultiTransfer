@@ -5,7 +5,11 @@ import { Erc20 } from "@/config/abi/types";
 import { isAddress } from "@/utils/isAddress";
 import SelectToken from "./SelectToken";
 import AddressList from "./AddressList";
+import ConfirmPage from "./ConfirmPage";
+
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+
 import { Token } from "@/config/constants/types";
 
 export default function Home() {
@@ -16,6 +20,7 @@ export default function Home() {
     const [addressValue, setAddressValue] = useState("");
     const [addressList, setAddresslist] = useState<string[]>([]);
     const [sendValue, setSendValue] = useState("1");
+    const [confirm, setConfirm] = useState(false);
     const [selectObject, setSelectObject] = useState<Token>({
         address: "",
         name: "",
@@ -90,56 +95,85 @@ export default function Home() {
 
     return (
         <div className="w-11/12 pb-5 min-h-[500px] shadow-[0_0_10px_0_rgba(0,0,0,0.25)] m-auto mt-20 rounded-2xl mb-20 lg:w-7/12">
-            <div className="text-[#031a6e] text-[18px] font-bold text-center pt-5">批量发送代币</div>
+            {!confirm ? (
+                <div>
+                    <div className="text-[#031a6e] text-[18px] font-bold text-center pt-5">批量发送代币</div>
 
-            <div className="mt-10 pl-10 pr-10">
-                <SelectToken
-                    tokenList={tokenList}
-                    onInChange={onInChange}
-                    onEventChange={onEventChange}
-                    open={open}
-                ></SelectToken>
-            </div>
-            <div className="mt-10 pl-10 pr-10 pb-5">
-                <AddressList
-                    onSetAddressChange={onSetAddressChange}
-                    addressValue={addressValue}
-                    onSetAddressListChange={onSetAddressListChange}
-                    addressList={addressList}
-                ></AddressList>
-            </div>
-            <div className="pl-10 pr-10 my-5">{errAddressList}</div>
+                    <div className="mt-10 pl-10 pr-10">
+                        <SelectToken
+                            tokenList={tokenList}
+                            onInChange={onInChange}
+                            onEventChange={onEventChange}
+                            open={open}
+                        ></SelectToken>
+                    </div>
+                    <div className="mt-10 pl-10 pr-10 pb-5">
+                        <AddressList
+                            onSetAddressChange={onSetAddressChange}
+                            addressValue={addressValue}
+                            onSetAddressListChange={onSetAddressListChange}
+                            addressList={addressList}
+                        ></AddressList>
+                    </div>
+                    <div className="pl-10 pr-10 my-5">{errAddressList}</div>
 
-            <div className="pl-10 pr-10 text-right flex items-center">
-                <div className="w-3/5  flex items-center">
-                    <div className="text-[14px]">每个地址发送：</div>
-                    <div className="ml-2">
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            className="w-24"
-                            size="small"
-                            value={sendValue}
-                            onChange={(e) => {
-                                setSendValue(e.target.value);
+                    <div className="pl-10 pr-10 text-right flex items-center">
+                        <div className="w-3/5  flex items-center">
+                            <div className="text-[14px]">每个地址发送：</div>
+                            <div className="ml-2">
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    className="w-24"
+                                    size="small"
+                                    value={sendValue}
+                                    onChange={(e) => {
+                                        setSendValue(e.target.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div
+                            className="w-2/5 text-gray-500 text-[14px]  hover:cursor-pointer"
+                            onClick={() => {
+                                onSetAddressChange(
+                                    "0x731c3A53D26487Ea8c9768863CC98BEeaC666666\n0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
+                                );
+                                onSetAddressListChange([
+                                    "0x731c3A53D26487Ea8c9768863CC98BEeaC666666",
+                                    "0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
+                                ]);
                             }}
-                        />
+                        >
+                            查看例子
+                        </div>
                     </div>
                 </div>
-                <div
-                    className="w-2/5 text-gray-500 text-[14px]  hover:cursor-pointer"
+            ) : (
+                <div>
+                    <ConfirmPage></ConfirmPage>
+                </div>
+            )}
+
+            <div className="px-10 py-10 ">
+                {confirm && (
+                    <Button
+                        onClick={() => {
+                            setConfirm(false);
+                        }}
+                    >
+                        返回
+                    </Button>
+                )}
+                <Button
+                    variant="contained"
+                    className="w-32 h-12"
                     onClick={() => {
-                        onSetAddressChange(
-                            "0x731c3A53D26487Ea8c9768863CC98BEeaC666666\n0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
-                        );
-                        onSetAddressListChange([
-                            "0x731c3A53D26487Ea8c9768863CC98BEeaC666666",
-                            "0x281Da8e5b33c98BB0600Bbc419250CBF07FD0809",
-                        ]);
+                        setConfirm(true);
                     }}
                 >
-                    查看例子
-                </div>
+                    下一步
+                </Button>
             </div>
         </div>
     );
