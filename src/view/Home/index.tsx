@@ -19,8 +19,14 @@ export default function Home() {
     const [searchValue, setSearchValue] = useState("");
     const [addressValue, setAddressValue] = useState("");
     const [addressList, setAddresslist] = useState<string[]>([]);
-    const [sendValue, setSendValue] = useState("1");
+    const [sendValue, setSendValue] = useState(1);
     const [confirm, setConfirm] = useState(false);
+    const [tableData, setTableData] = useState<
+        {
+            address: string;
+            amount: number;
+        }[]
+    >([]);
     const [selectObject, setSelectObject] = useState<Token>({
         address: "",
         name: "",
@@ -128,7 +134,7 @@ export default function Home() {
                                     size="small"
                                     value={sendValue}
                                     onChange={(e) => {
-                                        setSendValue(e.target.value);
+                                        setSendValue(Number(e.target.value));
                                     }}
                                 />
                             </div>
@@ -151,7 +157,7 @@ export default function Home() {
                 </div>
             ) : (
                 <div>
-                    <ConfirmPage></ConfirmPage>
+                    <ConfirmPage addressList={addressList} tableData={tableData}></ConfirmPage>
                 </div>
             )}
 
@@ -169,6 +175,15 @@ export default function Home() {
                     variant="contained"
                     className="w-32 h-12"
                     onClick={() => {
+                        let arr = addressList;
+                        let newArr = [];
+                        for (let i = 0; i < arr.length; i++) {
+                            newArr.push({
+                                address: arr[i],
+                                amount: sendValue,
+                            });
+                        }
+                        setTableData(newArr);
                         setConfirm(true);
                     }}
                 >
