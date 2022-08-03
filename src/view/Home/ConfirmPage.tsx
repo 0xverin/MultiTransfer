@@ -14,8 +14,6 @@ interface ConfirmProps {
 export default function ConfirmPage(props: ConfirmProps) {
     const { addressList, delAddressList } = props;
 
-    console.log(addressList);
-
     const [tableData, setTableData] = useState<any>([]);
 
     const initArray = () => {
@@ -157,6 +155,11 @@ export default function ConfirmPage(props: ConfirmProps) {
                         )}
                     </TableBody>
                 </Table>
+                {addressList.length === 0 && (
+                    <div className="w-full bg-gray-50 h-[200px] flex justify-center items-center">
+                        <img src="/src/assets/nodata.png" alt="no data" className="w-[100px] h-[100px]" />
+                    </div>
+                )}
             </div>
         </div>
     );
