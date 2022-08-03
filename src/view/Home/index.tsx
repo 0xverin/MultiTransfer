@@ -25,6 +25,7 @@ export default function Home() {
         {
             address: string;
             amount: number;
+            id: number;
         }[]
     >([]);
     const [selectObject, setSelectObject] = useState<Token>({
@@ -75,6 +76,14 @@ export default function Home() {
     };
     const onSetAddressListChange = (value: any) => {
         setAddresslist(value);
+    };
+
+    const delAddressList = (index: number) => {
+        let newArr = [...addressList];
+        newArr.splice(index, 1);
+        setAddresslist(newArr);
+
+        setAddressValue(newArr.join("\n"));
     };
 
     const errAddressList = useMemo(() => {
@@ -157,7 +166,11 @@ export default function Home() {
                 </div>
             ) : (
                 <div>
-                    <ConfirmPage addressList={addressList} tableData={tableData}></ConfirmPage>
+                    <ConfirmPage
+                        addressList={addressList}
+                        tableData={tableData}
+                        delAddressList={delAddressList}
+                    ></ConfirmPage>
                 </div>
             )}
 
@@ -176,15 +189,6 @@ export default function Home() {
                     variant="contained"
                     className="w-32 h-12"
                     onClick={() => {
-                        let arr = addressList;
-                        let newArr = [];
-                        for (let i = 0; i < arr.length; i++) {
-                            newArr.push({
-                                address: arr[i],
-                                amount: sendValue,
-                            });
-                        }
-                        setTableData(newArr);
                         setConfirm(true);
                     }}
                 >
