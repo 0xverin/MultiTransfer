@@ -164,6 +164,7 @@ export default function Home() {
             <div className="px-10 py-10 ">
                 {confirm && (
                     <Button
+                        className="w-32 h-12"
                         onClick={() => {
                             setConfirm(false);
                         }}

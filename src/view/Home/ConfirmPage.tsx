@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 
 const rows: any = [];
 
@@ -15,16 +13,8 @@ interface ConfirmProps {
 }
 export default function ConfirmPage(props: ConfirmProps) {
     const { addressList, tableData } = props;
-    console.log("addressList", tableData);
 
-    function createData(address: string, amount: number) {
-        return { address, amount };
-    }
-    useEffect(() => {
-        for (let index = 0; index < addressList.length; index++) {
-            // rows.push(createData(addressList[index].address, addressList[index].amount));
-        }
-    }, []);
+    useEffect(() => {}, []);
     return (
         <div className="px-10 py-10">
             <div className="text-[#031a6e] text-[18px]">确认交易</div>
@@ -63,6 +53,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                                 align="left"
                                 sx={{
                                     borderTop: "1px solid #E0E0E0",
+                                    borderRight: "1px solid #E0E0E0",
                                 }}
                             >
                                 操作&nbsp;
@@ -70,7 +61,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => (
+                        {tableData.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell
                                     component="th"
@@ -90,7 +81,12 @@ export default function ConfirmPage(props: ConfirmProps) {
                                 >
                                     {row.amount}
                                 </TableCell>
-                                <TableCell align="left">
+                                <TableCell
+                                    align="left"
+                                    sx={{
+                                        borderRight: "1px solid #E0E0E0",
+                                    }}
+                                >
                                     <div>删除</div>
                                 </TableCell>
                             </TableRow>

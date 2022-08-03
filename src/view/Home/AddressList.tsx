@@ -12,8 +12,8 @@ export default function AddressList(props: propsInter) {
     return (
         <div>
             <div className="text-[#031a6e] text-[16px]">收币地址</div>
-            <div className="mt-5 flex pb-5 bg-[#F9F9F9] pl-5">
-                <div className="text-[15px] leading-[25px] mr-3 ">
+            <div className="mt-5 flex pb-5 bg-[#F9F9F9] pl-5  pt-5">
+                <div className="text-[15px] leading-[25px] mr-3 text-[#001A6B]">
                     {addressList.length
                         ? addressList.map((item, index) => {
                               return <div key={index}>{index + 1}</div>;
@@ -44,6 +44,7 @@ export default function AddressList(props: propsInter) {
                                 padding: 0,
                                 lineHeight: "25px",
                                 fontSize: "15px",
+                                color: "#001A6B",
                             },
                         }}
                         className="w-full bg-[#F9F9F9] text-clip"
