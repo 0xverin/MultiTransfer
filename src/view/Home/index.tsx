@@ -6,9 +6,10 @@ import { isAddress } from "@/utils/isAddress";
 import SelectToken from "./SelectToken";
 import AddressList from "./AddressList";
 import ConfirmPage from "./ConfirmPage";
-
+import defaultTokenList from "@/config/tokens/index";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { NATIVE } from "@/config/constants/native";
 
 import { Token } from "@/config/constants/types";
 
@@ -16,6 +17,8 @@ export default function Home() {
     const { account, chainId, error, activate } = useActiveWeb3React();
     const [open, setOpen] = useState(false);
     const [tokenList, setTokenList] = useState<Token[]>([]);
+    const [token, setToken] = useState<Token>({ address: "", name: "", symbol: "", decimals: 18, chainId });
+
     const [searchValue, setSearchValue] = useState("");
     const [addressValue, setAddressValue] = useState("");
     const [addressList, setAddresslist] = useState<string[]>([]);
@@ -64,7 +67,20 @@ export default function Home() {
         };
         getErc20Info();
     }, [ERC20Instarnce]);
-
+    useEffect(() => {
+        if (chainId && defaultTokenList[chainId]) {
+            let _tokenList = [...defaultTokenList[chainId]];
+            _tokenList.sort((t1, t2) => {
+                return t1.symbol.toLowerCase() < t2.symbol.toLowerCase() ? -1 : 1;
+            });
+            _tokenList = [NATIVE[chainId], ..._tokenList];
+            setTokenList(_tokenList);
+            setToken(NATIVE[chainId]);
+        } else {
+            setTokenList([]);
+            setToken({ address: "", name: "", symbol: "", decimals: 18, chainId: chainId });
+        }
+    }, [chainId]);
     const onInChange = (value: any) => {
         setSearchValue(value);
     };

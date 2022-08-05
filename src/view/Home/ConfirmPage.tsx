@@ -156,8 +156,8 @@ export default function ConfirmPage(props: ConfirmProps) {
                     </TableBody>
                 </Table>
                 {addressList.length === 0 && (
-                    <div className="w-full bg-gray-50 h-[200px] flex justify-center items-center">
-                        <img src="/src/assets/nodata.png" alt="no data" className="w-[100px] h-[100px]" />
+                    <div className="w-full  h-[200px] flex justify-center items-center">
+                        <img src="/src/assets/nodata.png" alt="no data" className=" h-[100px]" />
                     </div>
                 )}
             </div>
