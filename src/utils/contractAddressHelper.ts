@@ -1,4 +1,4 @@
-import addresses from "@/config/constants/cntractAddresses";
+import addresses from "@/config/constants/contractAddresses";
 import { Address } from "@/config/constants/types";
 import defaultChainId from "@/config/constants/defaultChainId";
 
