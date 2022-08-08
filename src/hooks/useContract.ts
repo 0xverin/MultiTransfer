@@ -7,8 +7,8 @@ import { getProviderOrSigner } from "@/utils";
 import { Contract } from "@ethersproject/contracts";
 import { getMultiTransferAddress } from "@/utils/contractAddressHelper";
 
-import erc20Abi from "@/config/abi/erc20.json";
-import TransferAbi from "@/config/abi/MutilTransfer.json";
+import ERC20_ABI from "@/config/abi/erc20.json";
+import Transfer_ABI from "@/config/abi/MutilTransfer.json";
 // export const useExampleContract = (address: string, withSignerIfPossible = true) => {
 //   return useContract(address, ContractAbi, withSignerIfPossible);
 // };
@@ -21,11 +21,11 @@ import TransferAbi from "@/config/abi/MutilTransfer.json";
 
 export const useTransfer = (withSignerIfPossible = true) => {
     const { chainId } = useActiveWeb3React();
-    return useContract(chainId ? getMultiTransferAddress(chainId) : "", TransferAbi, withSignerIfPossible);
+    return useContract(chainId ? getMultiTransferAddress(chainId) : undefined, Transfer_ABI, withSignerIfPossible);
 };
 
 export const useERC20 = (address: string, withSignerIfPossible = true) => {
-    return useContract(address, erc20Abi, withSignerIfPossible);
+    return useContract(address, ERC20_ABI, withSignerIfPossible);
 };
 
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {

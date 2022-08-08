@@ -10,9 +10,10 @@ interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
     delAddressList: (id: number) => void;
+    sendValue: number;
 }
 export default function ConfirmPage(props: ConfirmProps) {
-    const { addressList, delAddressList } = props;
+    const { addressList, delAddressList, sendValue } = props;
 
     const [tableData, setTableData] = useState<any>([]);
 
@@ -160,6 +161,57 @@ export default function ConfirmPage(props: ConfirmProps) {
                         <img src="/src/assets/nodata.png" alt="no data" className=" h-[100px]" />
                     </div>
                 )}
+            </div>
+            <div className="text-[#031a6e] text-[18px]">摘要</div>
+            <div className="m-h-96">
+                <div className="bg-[#F6F6F6] w-full h-full m-auto mt-5 border-[rgba(9,25,106,0.05)] border-solid">
+                    <div className="flex justify-around border-[1px] border-solid border-transparent border-b-gray-300">
+                        <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
+                            <div className="flex items-center justify-center text-[24px] mt-10 text-[#09196A]">
+                                {addressList.length}
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">地址总数</div>
+                        </div>
+
+                        <div className="w-1/2 h-32 ">
+                            <div className="flex items-center justify-center text-[24px] mt-10 text-[#09196A]">
+                                {addressList.length * sendValue}
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">
+                                代币发送总数
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-around border-[1px] border-solid border-transparent border-b-gray-300">
+                        <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
+                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">1</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">交易总数</div>
+                        </div>
+
+                        <div className="w-1/2 h-32 ">
+                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                                123123
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">代币余额</div>
+                        </div>
+                    </div>
+                    <div className="flex justify-around">
+                        <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
+                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                                123123
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">地址总数</div>
+                        </div>
+
+                        <div className="w-1/2 h-32 ">
+                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                                123123
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">您的余额</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

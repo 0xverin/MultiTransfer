@@ -10,8 +10,9 @@ import defaultTokenList from "@/config/tokens/index";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { NATIVE } from "@/config/constants/native";
-
 import { Token } from "@/config/constants/types";
+
+import useTokenBalance from "@/hooks/useTokenBalance";
 
 export default function Home() {
     const { account, chainId, error, activate } = useActiveWeb3React();
@@ -38,6 +39,8 @@ export default function Home() {
         decimals: 18,
         chainId,
     });
+    const balance = useTokenBalance("");
+    console.log(3333, balance.value.toString());
 
     const address = useMemo(() => {
         return isAddress(searchValue) ? searchValue : "";
@@ -185,6 +188,7 @@ export default function Home() {
                     <ConfirmPage
                         addressList={addressList}
                         tableData={tableData}
+                        sendValue={sendValue}
                         delAddressList={delAddressList}
                     ></ConfirmPage>
                 </div>
@@ -208,7 +212,7 @@ export default function Home() {
                         setConfirm(true);
                     }}
                 >
-                    下一步
+                    {confirm ? "发送" : "下一步"}
                 </Button>
             </div>
         </div>
