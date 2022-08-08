@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { injected } from "@/config/constants/wallets";
-import { formatAddress } from "@/utils/formatString";
+import { formatAddress } from "@/utils/format";
 import { UnsupportedChainIdError } from "@web3-react/core";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -16,7 +16,7 @@ function useTokenBalance(tokenAddress: string): BalanceProps {
         decimals: 18,
     });
     const { account, chainId, library } = useActiveWeb3React();
-    const addressCheckSum = isAddress(tokenAddress);
+    // const addressCheckSum = isAddress(tokenAddress);
     const tokenContract = useContract(tokenAddress ? tokenAddress : undefined, ERC20_ABI, false);
 
     const fetchBalance = useCallback(async () => {
@@ -37,6 +37,7 @@ function useTokenBalance(tokenAddress: string): BalanceProps {
             }
         }
         const balance = await getBalance(tokenContract, account);
+
         setBalance(balance);
     }, [account, chainId, library, tokenContract]);
 

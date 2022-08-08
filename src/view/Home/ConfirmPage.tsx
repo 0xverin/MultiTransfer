@@ -32,6 +32,7 @@ export default function ConfirmPage(props: ConfirmProps) {
     useEffect(() => {
         initArray();
     }, [addressList]);
+
     return (
         <div className="px-10 py-10">
             <div className="text-[#031a6e] text-[18px]">确认交易</div>
