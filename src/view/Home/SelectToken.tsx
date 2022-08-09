@@ -9,11 +9,11 @@ interface propsInter {
     onInChange: (value: any) => void;
     onEventChange: (value: any) => void;
     open: boolean;
-    selectObject: Token;
+    token: Token;
 }
 
 export default function SelectToken(props: propsInter) {
-    const { tokenList, onInChange, onEventChange, open, selectObject } = props;
+    const { tokenList, onInChange, onEventChange, open, token } = props;
     const [options, setOptions] = useState<any>([]);
     const loading = open && options.length === 0;
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function SelectToken(props: propsInter) {
                 id="asynchronous-demo"
                 disableClearable
                 options={tokenList}
-                value={selectObject}
+                value={token}
                 sx={{
                     marginTop: "10px",
                 }}

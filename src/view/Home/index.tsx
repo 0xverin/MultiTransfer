@@ -11,8 +11,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { NATIVE } from "@/config/constants/native";
 import { Token } from "@/config/constants/types";
-import useTokenBalance from "@/hooks/useTokenBalance";
-import { formatBalance } from "@/utils/format";
+
 export default function Home() {
     const { account, chainId, error, activate } = useActiveWeb3React();
     const [open, setOpen] = useState(false);
@@ -31,15 +30,6 @@ export default function Home() {
             id: number;
         }[]
     >([]);
-    const [selectObject, setSelectObject] = useState<Token>({
-        address: "",
-        name: "",
-        symbol: "",
-        decimals: 18,
-        chainId,
-    });
-    const tokenBalance = useTokenBalance(selectObject.address);
-    console.log(formatBalance(tokenBalance.value));
 
     const address = useMemo(() => {
         return isAddress(searchValue) ? searchValue : "";
@@ -78,7 +68,6 @@ export default function Home() {
             _tokenList = [NATIVE[chainId], ..._tokenList];
             setTokenList(_tokenList);
             setToken(NATIVE[chainId]);
-            setSelectObject(NATIVE[chainId]);
         } else {
             setTokenList([]);
             setToken({ address: "", name: "", symbol: "", decimals: 18, chainId: chainId });
@@ -90,7 +79,7 @@ export default function Home() {
         setSearchValue(value);
     };
     const onEventChange = (value: any) => {
-        setSelectObject(value);
+        setToken(value);
     };
     const onSetAddressChange = (value: any) => {
         setAddressValue(value);
@@ -141,7 +130,7 @@ export default function Home() {
                             onInChange={onInChange}
                             onEventChange={onEventChange}
                             open={open}
-                            selectObject={selectObject}
+                            token={token}
                         ></SelectToken>
                     </div>
                     <div className="mt-10 pl-10 pr-10 pb-5">
@@ -192,7 +181,9 @@ export default function Home() {
                         addressList={addressList}
                         tableData={tableData}
                         sendValue={sendValue}
+                        tokenList={tokenList}
                         delAddressList={delAddressList}
+                        token={token}
                     ></ConfirmPage>
                 </div>
             )}

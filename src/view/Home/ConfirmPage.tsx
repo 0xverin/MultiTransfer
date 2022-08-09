@@ -5,15 +5,21 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
+import useTokenBalance from "@/hooks/useTokenBalance";
+import { formatBalance } from "@/utils/format";
 
 interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
     delAddressList: (id: number) => void;
     sendValue: number;
+    token: any;
+    tokenList: Array<any>;
 }
 export default function ConfirmPage(props: ConfirmProps) {
-    const { addressList, delAddressList, sendValue } = props;
+    const { addressList, delAddressList, sendValue, token, tokenList } = props;
+    const tokenBalance = useTokenBalance(token.address);
+    const nativeBalance = useTokenBalance("");
 
     const [tableData, setTableData] = useState<any>([]);
 
@@ -192,7 +198,7 @@ export default function ConfirmPage(props: ConfirmProps) {
 
                         <div className="w-1/2 h-32 ">
                             <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
-                                123123
+                                {formatBalance(tokenBalance.value, token.decimals, 3)} {token.symbol}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[14px]">代币余额</div>
                         </div>
@@ -202,12 +208,12 @@ export default function ConfirmPage(props: ConfirmProps) {
                             <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
                                 123123
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">地址总数</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[14px]">预估消耗</div>
                         </div>
 
                         <div className="w-1/2 h-32 ">
                             <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
-                                123123
+                                {formatBalance(nativeBalance.value, 18, 3)} {tokenList[0].symbol}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[14px]">您的余额</div>
                         </div>
