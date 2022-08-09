@@ -21,7 +21,6 @@ export default function SelectToken(props: propsInter) {
             setOptions([]);
         }
     }, [open]);
-    console.log(tokenList);
 
     return (
         <div>

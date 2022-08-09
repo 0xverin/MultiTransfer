@@ -2,7 +2,6 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Web3Provider } from "@ethersproject/providers";
 import { Web3ReactProvider, createWeb3ReactRoot } from "@web3-react/core";
 import Web3ReactManager from "@/components/Web3ReactManager/index";
-
 import { NetworkContextName } from "@/config";
 
 import Home from "@/view/Home";

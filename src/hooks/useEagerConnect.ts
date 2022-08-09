@@ -10,6 +10,7 @@ export function useEagerConnect() {
     useEffect(() => {
         injected.isAuthorized().then((isAuthorized: any) => {
             const hasSignedIn = window.localStorage.getItem(connectorLocalStorageKey);
+
             if (isAuthorized && hasSignedIn) {
                 activate(injected, undefined, true)
                     // .then(() => window.ethereum.removeAllListeners(['networkChanged']))

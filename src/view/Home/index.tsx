@@ -72,9 +72,9 @@ export default function Home() {
             setTokenList([]);
             setToken({ address: "", name: "", symbol: "", decimals: 18, chainId: chainId });
         }
+        setConfirm(false);
     }, [chainId]);
     const onInChange = (value: any) => {
-        console.log("onInChange", value);
 
         setSearchValue(value);
     };
