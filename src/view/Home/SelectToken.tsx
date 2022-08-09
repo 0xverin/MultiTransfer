@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Token } from "@/config/constants/types";
 
 interface propsInter {
     tokenList: Array<any>;
     onInChange: (value: any) => void;
     onEventChange: (value: any) => void;
     open: boolean;
+    selectObject: Token;
 }
 
 export default function SelectToken(props: propsInter) {
-    const { tokenList, onInChange, onEventChange, open } = props;
-
+    const { tokenList, onInChange, onEventChange, open, selectObject } = props;
     const [options, setOptions] = useState<any>([]);
     const loading = open && options.length === 0;
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function SelectToken(props: propsInter) {
             setOptions([]);
         }
     }, [open]);
+    console.log(tokenList);
 
     return (
         <div>
@@ -28,10 +30,14 @@ export default function SelectToken(props: propsInter) {
                 id="asynchronous-demo"
                 disableClearable
                 options={tokenList}
+                value={selectObject}
                 sx={{
                     marginTop: "10px",
                 }}
-                getOptionLabel={(option) => option.symbol + "  " + option.address}
+                getOptionLabel={(option) => option.symbol + " " + option.address}
+                isOptionEqualToValue={(option, newValue) => {
+                    return option.address === newValue.address;
+                }}
                 onInputChange={(event, newInputValue) => {
                     onInChange(newInputValue);
                 }}

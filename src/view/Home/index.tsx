@@ -78,12 +78,15 @@ export default function Home() {
             _tokenList = [NATIVE[chainId], ..._tokenList];
             setTokenList(_tokenList);
             setToken(NATIVE[chainId]);
+            setSelectObject(NATIVE[chainId]);
         } else {
             setTokenList([]);
             setToken({ address: "", name: "", symbol: "", decimals: 18, chainId: chainId });
         }
     }, [chainId]);
     const onInChange = (value: any) => {
+        console.log("onInChange", value);
+
         setSearchValue(value);
     };
     const onEventChange = (value: any) => {
@@ -138,6 +141,7 @@ export default function Home() {
                             onInChange={onInChange}
                             onEventChange={onEventChange}
                             open={open}
+                            selectObject={selectObject}
                         ></SelectToken>
                     </div>
                     <div className="mt-10 pl-10 pr-10 pb-5">
