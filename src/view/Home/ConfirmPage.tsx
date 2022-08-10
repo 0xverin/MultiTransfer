@@ -1,3 +1,6 @@
+import backIcon from "@/assets/back.svg";
+import nodataIcon from "@/assets/nodata.svg";
+
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { useTransfer } from "@/hooks/useContract";
 import { useAllowance, useBalance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
@@ -14,7 +17,6 @@ import TableRow from "@mui/material/TableRow";
 import { useContext, useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Context } from "./index";
-
 interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
@@ -188,7 +190,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                 </Table>
                 {addressList.length === 0 && (
                     <div className="w-full  h-[200px] flex justify-center items-center">
-                        <img src="/src/assets/nodata.png" alt="no data" className=" h-[100px]" />
+                        <img src={nodataIcon} alt="no data" className=" h-[100px]" />
                     </div>
                 )}
             </div>
@@ -273,7 +275,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                         setConfirm(false);
                     }}
                 >
-                    <img src="/src/assets/back.svg" alt="" className="w-full h-4/5" />
+                    <img src={backIcon} alt="" className="w-full h-4/5" />
                 </Button>
                 <div className="ml-10">
                     {isApproved ? (
