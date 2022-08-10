@@ -1,8 +1,7 @@
+import ERC20_ABI from "@/config/abi/erc20.json";
+import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Contract } from "@ethersproject/contracts";
-import ERC20_ABI from "@/config/abi/erc20.json";
-import { isAddress } from "@/utils/isAddress";
-import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { useCallback, useEffect, useState } from "react";
 import { useContract } from "./useContract";
 

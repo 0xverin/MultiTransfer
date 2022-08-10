@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useWeb3React } from "@web3-react/core";
 import { network } from "@/config/constants/wallets";
 import { NetworkContextName } from "@/config/index";
+import { useWeb3React } from "@web3-react/core";
+import { useEffect, useState } from "react";
 
 import useEagerConnect from "@/hooks/useEagerConnect";
 import useInactiveListener from "@/hooks/useInactiveListener";

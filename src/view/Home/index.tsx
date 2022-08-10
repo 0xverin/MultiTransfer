@@ -1,27 +1,35 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
-import { useERC20 } from "@/hooks/useContract";
 import { Erc20 } from "@/config/abi/types";
-import { isAddress } from "@/utils/isAddress";
-import SelectToken from "./SelectToken";
-import AddressList from "./AddressList";
-import ConfirmPage from "./ConfirmPage";
-import defaultTokenList from "@/config/tokens/index";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { NATIVE } from "@/config/constants/native";
 import { Token } from "@/config/constants/types";
+import defaultTokenList from "@/config/tokens/index";
+import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
+import { useERC20 } from "@/hooks/useContract";
+import { isAddress } from "@/utils/isAddress";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { createContext, useEffect, useMemo, useState } from "react";
+import AddressList from "./AddressList";
+import ConfirmPage from "./ConfirmPage";
+import SelectToken from "./SelectToken";
+
+export const Context = createContext<any>({ confirm, setConfirm: () => {} });
 
 export default function Home() {
     const { account, chainId, error, activate } = useActiveWeb3React();
+
     const [open, setOpen] = useState(false);
     const [tokenList, setTokenList] = useState<Token[]>([]);
     const [token, setToken] = useState<Token>({ address: "", name: "", symbol: "", decimals: 18, chainId });
 
     const [searchValue, setSearchValue] = useState("");
+    const address = useMemo(() => {
+        return isAddress(searchValue) ? searchValue : "";
+    }, [searchValue]);
+
+    const ERC20Instarnce = useERC20(address);
     const [addressValue, setAddressValue] = useState("");
     const [addressList, setAddresslist] = useState<string[]>([]);
-    const [sendValue, setSendValue] = useState(1);
+    const [sendValue, setSendValue] = useState("1");
     const [confirm, setConfirm] = useState(false);
     const [tableData, setTableData] = useState<
         {
@@ -30,12 +38,6 @@ export default function Home() {
             id: number;
         }[]
     >([]);
-
-    const address = useMemo(() => {
-        return isAddress(searchValue) ? searchValue : "";
-    }, [searchValue]);
-
-    const ERC20Instarnce = useERC20(address);
 
     useEffect(() => {
         const getErc20Info = async () => {
@@ -75,7 +77,6 @@ export default function Home() {
         setConfirm(false);
     }, [chainId]);
     const onInChange = (value: any) => {
-
         setSearchValue(value);
     };
     const onEventChange = (value: any) => {
@@ -154,7 +155,9 @@ export default function Home() {
                                     size="small"
                                     value={sendValue}
                                     onChange={(e) => {
-                                        setSendValue(Number(e.target.value));
+                                        console.log(e.target.value);
+
+                                        setSendValue(e.target.value);
                                     }}
                                 />
                             </div>
@@ -177,19 +180,21 @@ export default function Home() {
                 </div>
             ) : (
                 <div>
-                    <ConfirmPage
-                        addressList={addressList}
-                        tableData={tableData}
-                        sendValue={sendValue}
-                        tokenList={tokenList}
-                        delAddressList={delAddressList}
-                        token={token}
-                    ></ConfirmPage>
+                    <Context.Provider value={{ confirm, setConfirm }}>
+                        <ConfirmPage
+                            addressList={addressList}
+                            tableData={tableData}
+                            sendValue={sendValue}
+                            tokenList={tokenList}
+                            delAddressList={delAddressList}
+                            token={token}
+                        ></ConfirmPage>
+                    </Context.Provider>
                 </div>
             )}
 
             <div className="px-10 py-10 ">
-                {confirm && (
+                {/* {confirm && (
                     <Button
                         className="w-32 h-12"
                         onClick={() => {
@@ -198,16 +203,18 @@ export default function Home() {
                     >
                         返回
                     </Button>
+                )} */}
+                {!confirm && (
+                    <Button
+                        variant="contained"
+                        className="w-32 h-12"
+                        onClick={() => {
+                            setConfirm(true);
+                        }}
+                    >
+                        下一步
+                    </Button>
                 )}
-                <Button
-                    variant="contained"
-                    className="w-32 h-12"
-                    onClick={() => {
-                        setConfirm(true);
-                    }}
-                >
-                    {confirm ? "发送" : "下一步"}
-                </Button>
             </div>
         </div>
     );

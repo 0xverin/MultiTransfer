@@ -1,27 +1,48 @@
+import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { useTransfer } from "@/hooks/useContract";
 import useTokenBalance from "@/hooks/useTokenBalance";
-import { formatBalance } from "@/utils/format";
+import { useAllowance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
+import { getMultiTransferAddress } from "@/utils/contractAddressHelper";
+import { accAdd, accMul, formatAmount, formatBalance, parseAmount } from "@/utils/format";
+import { isEth } from "@/utils/isEth";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Context } from "./index";
 interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
     delAddressList: (id: number) => void;
-    sendValue: number;
+    sendValue: string;
     token: any;
     tokenList: Array<any>;
 }
 export default function ConfirmPage(props: ConfirmProps) {
     const { addressList, delAddressList, sendValue, token, tokenList } = props;
+    let { confirm, setConfirm } = useContext(Context);
+
+    const { chainId, library, account } = useActiveWeb3React();
+    const { fee } = useTransferFee();
+    const { isApproved, getAllowance } = useAllowance(token, account, getMultiTransferAddress(chainId));
+    const { allFee, errorMessage } = useTransferGasFee({
+        token,
+        isApproved,
+        amount: sendValue,
+        toAddressList: addressList,
+        allAmount: accMul(parseAmount(sendValue, token.decimals), addressList.length),
+        fee,
+    });
+
     const tokenBalance = useTokenBalance(token.address);
     const nativeBalance = useTokenBalance("");
     const TransferInstance = useTransfer();
     const [tableData, setTableData] = useState<any>([]);
+    const [loading, setLoading] = useState(false);
 
     const initArray = () => {
         let arr = addressList;
@@ -35,9 +56,9 @@ export default function ConfirmPage(props: ConfirmProps) {
         }
         setTableData(newArr);
     };
+
     useEffect(() => {
         initArray();
-        console.log(TransferInstance);
     }, [addressList]);
 
     return (
@@ -170,7 +191,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                     </div>
                 )}
             </div>
-            <div className="text-[#031a6e] text-[18px]">摘要</div>
+            <div className="text-[#031a6e]  text-[14px] mt-10">摘要</div>
             <div className="m-h-96">
                 <div className="bg-[#F6F6F6] w-full h-full m-auto mt-5 border-[rgba(9,25,106,0.05)] border-solid border-[1px]">
                     <div className="flex justify-around border-[1px] border-solid border-transparent border-b-gray-300">
@@ -185,7 +206,7 @@ export default function ConfirmPage(props: ConfirmProps) {
 
                         <div className="w-1/2 h-32 ">
                             <div className="flex items-center justify-center  mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
-                                {addressList.length * sendValue}
+                                {Number(sendValue) * addressList.length}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 代币发送总数
@@ -215,10 +236,13 @@ export default function ConfirmPage(props: ConfirmProps) {
                     <div className="flex justify-around">
                         <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
                             <div className="flex items-center justify-center mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
-                                123123
+                                {formatAmount(allFee)}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 预估消耗
+                                <span className="text-red-600 font-bold">
+                                    （含手续费 {formatAmount(fee)} {token.symbol}）
+                                </span>
                             </div>
                         </div>
 
@@ -231,6 +255,77 @@ export default function ConfirmPage(props: ConfirmProps) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {errorMessage && (
+                <div className="m-h-20 break-all  border-red-500 border-[1px] border-solid text-[red] rounded-md mt-5 p-5 text-[12px]">
+                    {errorMessage}
+                </div>
+            )}
+
+            <div className="mt-10 flex">
+                <Button
+                    variant="contained"
+                    className="w-32 h-12 "
+                    onClick={() => {
+                        setConfirm(false);
+                    }}
+                >
+                    <img src="/src/assets/back.svg" alt="" className="w-full h-4/5" />
+                </Button>
+                <div className="ml-10">
+                    {isApproved ? (
+                        <LoadingButton
+                            variant="contained"
+                            loading={loading}
+                            loadingPosition="start"
+                            className="w-32 h-12"
+                            onClick={async () => {
+                                try {
+                                    setLoading(true);
+
+                                    const tokenAmount = parseAmount(sendValue, token.decimals);
+                                    const allAmount = accMul(
+                                        parseAmount(sendValue, token.decimals),
+                                        addressList.length,
+                                    );
+                                    let tx;
+
+                                    if (isEth(token, chainId)) {
+                                        tx = await TransferInstance.transferEth(addressList, tokenAmount.toString(), {
+                                            value: accAdd(allAmount, fee),
+                                        });
+                                    } else {
+                                        tx = await TransferInstance.transferToken(
+                                            token.address,
+                                            addressList,
+                                            tokenAmount.toString(),
+                                            {
+                                                value: fee,
+                                            },
+                                        );
+                                    }
+                                    await tx.wait();
+                                    setLoading(false);
+                                } catch (error) {
+                                    setLoading(false);
+                                }
+                            }}
+                        >
+                            发送
+                        </LoadingButton>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            className="w-32 h-12"
+                            onClick={() => {
+                                // setConfirm(true);
+                            }}
+                        >
+                            授权
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
-import { ChainId } from "./chainId";
+import { NetworkConnector } from "@/config/connectors/NetworkConnector";
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { InjectedConnector } from "@web3-react/injected-connector";
-import { NetworkConnector } from "@/config/connectors/NetworkConnector";
+import { ChainId } from "./chainId";
 import RPC from "./rpc";
 
 const supportedChainIds = Object.values(ChainId) as number[];

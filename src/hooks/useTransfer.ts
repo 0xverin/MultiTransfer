@@ -1,8 +1,114 @@
+import { Token } from "@/config/constants/types";
+import { useTransfer } from "@/hooks/useContract";
+import { accAdd, accGt, accMul, parseAmount } from "@/utils/format";
+import { isEth } from "@/utils/isEth";
 import { useEffect, useState } from "react";
 import { useActiveWeb3React } from "./useActiveWeb3React";
 import { useERC20 } from "./useContract";
-import { getAddress, isAddress } from "@ethersproject/address";
+export const useAllowance = (token: Token, account: string, to: string) => {
+    const { chainId } = useActiveWeb3React();
 
+    const [isApproved, setIsApproved] = useState<boolean>(false);
+    const bep20Contract = useERC20(token.address);
 
-import { Erc20 } from "@/config/abi/types";
-import { Token } from "@/config/constants/types";
+    const getAllowance = async () => {
+        if (!account) {
+            return;
+        }
+        if (isEth(token, chainId)) {
+            setIsApproved(true);
+            return;
+        }
+        const response = await bep20Contract.allowance(account, to);
+        setIsApproved(accGt(response.toString(), "0"));
+    };
+    useEffect(() => {
+        getAllowance();
+    }, [account]);
+
+    return { isApproved, getAllowance };
+};
+export const useTransferFee = () => {
+    const [fee, setFee] = useState<string>("");
+    const TransferInstance = useTransfer();
+
+    const getTransferFee = async () => {
+        const response = await TransferInstance.fee();
+
+        setFee(response.toString());
+    };
+
+    useEffect(() => {
+        getTransferFee();
+    }, []);
+
+    return { fee };
+};
+interface TransferGasFee {
+    token: Token;
+    isApproved: boolean;
+    amount?: string;
+    toAddressList: string[];
+    allAmount: string;
+    fee: string;
+    tokenAmountList?: string[];
+}
+export const useTransferGasFee = ({ token, isApproved, amount, toAddressList, allAmount, fee }: TransferGasFee) => {
+    const TransferInstance = useTransfer();
+
+    const { account, chainId, library } = useActiveWeb3React();
+    const [allFee, setAllFee] = useState<string>("0");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const getTransferFee = async () => {
+        if (!account) {
+            return;
+        }
+        if (!isApproved) {
+            return;
+        }
+        if (fee === "") {
+            return;
+        }
+        try {
+            const gasPrice = await library.getGasPrice();
+
+            const tokenAmount = parseAmount(amount, token.decimals);
+
+            if (isEth(token, chainId)) {
+                console.log(toAddressList);
+                console.log(tokenAmount);
+
+                const estimateGas = await TransferInstance.estimateGas.transferEth(toAddressList, tokenAmount, {
+                    value: accAdd(allAmount, fee),
+                });
+
+                const allFee = accAdd(accMul(gasPrice.toString(), estimateGas.toString()), fee);
+
+                setAllFee(allFee);
+            } else {
+                const gasRes = await TransferInstance.estimateGas.transferToken(
+                    token.address,
+                    toAddressList,
+                    tokenAmount,
+                    {
+                        value: fee,
+                    },
+                );
+                const allFee = accAdd(accMul(gasPrice.toString(), gasRes.toString()), fee);
+                setAllFee(allFee);
+            }
+            setErrorMessage("");
+        } catch (callError: any) {
+            setAllFee(fee);
+            setErrorMessage(
+                callError.error?.message || callError.reason || callError.data?.message || callError.message,
+            );
+        }
+    };
+
+    useEffect(() => {
+        getTransferFee();
+    }, [account, isApproved, fee, toAddressList]);
+
+    return { allFee, errorMessage };
+};
