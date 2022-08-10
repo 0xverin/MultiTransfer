@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import { useTransfer } from "@/hooks/useContract";
+import useTokenBalance from "@/hooks/useTokenBalance";
+import { formatBalance } from "@/utils/format";
+import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Button from "@mui/material/Button";
-import useTokenBalance from "@/hooks/useTokenBalance";
-import { formatBalance } from "@/utils/format";
-
+import { useEffect, useState } from "react";
 interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
@@ -20,7 +20,7 @@ export default function ConfirmPage(props: ConfirmProps) {
     const { addressList, delAddressList, sendValue, token, tokenList } = props;
     const tokenBalance = useTokenBalance(token.address);
     const nativeBalance = useTokenBalance("");
-
+    const TransferInstance = useTransfer();
     const [tableData, setTableData] = useState<any>([]);
 
     const initArray = () => {
@@ -37,6 +37,7 @@ export default function ConfirmPage(props: ConfirmProps) {
     };
     useEffect(() => {
         initArray();
+        console.log(TransferInstance);
     }, [addressList]);
 
     return (
@@ -171,20 +172,22 @@ export default function ConfirmPage(props: ConfirmProps) {
             </div>
             <div className="text-[#031a6e] text-[18px]">摘要</div>
             <div className="m-h-96">
-                <div className="bg-[#F6F6F6] w-full h-full m-auto mt-5 border-[rgba(9,25,106,0.05)] border-solid">
+                <div className="bg-[#F6F6F6] w-full h-full m-auto mt-5 border-[rgba(9,25,106,0.05)] border-solid border-[1px]">
                     <div className="flex justify-around border-[1px] border-solid border-transparent border-b-gray-300">
                         <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
-                            <div className="flex items-center justify-center text-[24px] mt-10 text-[#09196A]">
+                            <div className="flex items-center justify-center  mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
                                 {addressList.length}
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">地址总数</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
+                                地址总数
+                            </div>
                         </div>
 
                         <div className="w-1/2 h-32 ">
-                            <div className="flex items-center justify-center text-[24px] mt-10 text-[#09196A]">
+                            <div className="flex items-center justify-center  mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
                                 {addressList.length * sendValue}
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 代币发送总数
                             </div>
                         </div>
@@ -192,30 +195,40 @@ export default function ConfirmPage(props: ConfirmProps) {
 
                     <div className="flex justify-around border-[1px] border-solid border-transparent border-b-gray-300">
                         <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
-                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">1</div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">交易总数</div>
+                            <div className="flex items-center justify-center mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
+                                1
+                            </div>
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
+                                交易总数
+                            </div>
                         </div>
 
                         <div className="w-1/2 h-32 ">
-                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                            <div className="flex items-center justify-center mt-10  text-[#09196A] text-[16px] sm:text-[24px]">
                                 {formatBalance(tokenBalance.value, token.decimals, 3)} {token.symbol}
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">代币余额</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
+                                代币余额
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-around">
                         <div className="w-1/2 h-32 border-[1px] border-solid border-transparent border-r-gray-300">
-                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                            <div className="flex items-center justify-center mt-10 text-[#09196A] text-[16px] sm:text-[24px]">
                                 123123
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">预估消耗</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
+                                预估消耗
+                            </div>
                         </div>
 
                         <div className="w-1/2 h-32 ">
-                            <div className="flex items-center justify-center mt-10 text-[24px] text-[#09196A]">
+                            <div className="flex items-center justify-center mt-10  text-[#09196A] text-[16px] sm:text-[24px]">
                                 {formatBalance(nativeBalance.value, 18, 3)} {tokenList[0].symbol}
                             </div>
-                            <div className="flex items-center justify-center text-gray-400 text-[14px]">您的余额</div>
+                            <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
+                                您的余额
+                            </div>
                         </div>
                     </div>
                 </div>
