@@ -1,7 +1,6 @@
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { useTransfer } from "@/hooks/useContract";
-import useTokenBalance from "@/hooks/useTokenBalance";
-import { useAllowance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
+import { useAllowance, useBalance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
 import { getMultiTransferAddress } from "@/utils/contractAddressHelper";
 import { accAdd, accMul, formatAmount, formatBalance, parseAmount } from "@/utils/format";
 import { isEth } from "@/utils/isEth";
@@ -13,7 +12,9 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useContext, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { Context } from "./index";
+
 interface ConfirmProps {
     addressList: Array<string>;
     tableData: Array<{ address: string; amount: number; id: number }>;
@@ -27,6 +28,8 @@ export default function ConfirmPage(props: ConfirmProps) {
     let { confirm, setConfirm } = useContext(Context);
 
     const { chainId, library, account } = useActiveWeb3React();
+    const { nativeBalance, tokenBalance, getBalance } = useBalance(token, account);
+
     const { fee } = useTransferFee();
     const { isApproved, getAllowance } = useAllowance(token, account, getMultiTransferAddress(chainId));
     const { allFee, errorMessage } = useTransferGasFee({
@@ -38,8 +41,6 @@ export default function ConfirmPage(props: ConfirmProps) {
         fee,
     });
 
-    const tokenBalance = useTokenBalance(token.address);
-    const nativeBalance = useTokenBalance("");
     const TransferInstance = useTransfer();
     const [tableData, setTableData] = useState<any>([]);
     const [loading, setLoading] = useState(false);
@@ -226,7 +227,7 @@ export default function ConfirmPage(props: ConfirmProps) {
 
                         <div className="w-1/2 h-32 ">
                             <div className="flex items-center justify-center mt-10  text-[#09196A] text-[16px] sm:text-[24px]">
-                                {formatBalance(tokenBalance.value, token.decimals, 3)} {token.symbol}
+                                {formatBalance(tokenBalance, token.decimals, 3)} {token.symbol}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 代币余额
@@ -248,7 +249,7 @@ export default function ConfirmPage(props: ConfirmProps) {
 
                         <div className="w-1/2 h-32 ">
                             <div className="flex items-center justify-center mt-10  text-[#09196A] text-[16px] sm:text-[24px]">
-                                {formatBalance(nativeBalance.value, 18, 3)} {tokenList[0].symbol}
+                                {formatBalance(nativeBalance, 18, 3)} {tokenList[0].symbol}
                             </div>
                             <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 您的余额
@@ -308,6 +309,11 @@ export default function ConfirmPage(props: ConfirmProps) {
                                     }
                                     await tx.wait();
                                     setLoading(false);
+                                    toast.success("Transfer Success", {
+                                        position: toast.POSITION.TOP_LEFT,
+                                        theme: "colored",
+                                    });
+                                    getBalance();
                                 } catch (error) {
                                     setLoading(false);
                                 }
@@ -328,6 +334,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                     )}
                 </div>
             </div>
+            <ToastContainer></ToastContainer>
         </div>
     );
 }

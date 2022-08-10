@@ -112,3 +112,31 @@ export const useTransferGasFee = ({ token, isApproved, amount, toAddressList, al
 
     return { allFee, errorMessage };
 };
+
+export const useBalance = (token: Token, account: string) => {
+    const { library, chainId } = useActiveWeb3React();
+    const [nativeBalance, setBalance] = useState<string>("0");
+    const [tokenBalance, setTokenBalance] = useState<string>("0");
+    const ERC20Contract = useERC20(token.address);
+
+    const getBalance = async () => {
+        if (!account) {
+            return;
+        }
+        const balance = await library.getBalance(account);
+        setBalance(balance.toString());
+
+        if (isEth(token, chainId)) {
+            const tokenBalance = balance;
+            setTokenBalance(tokenBalance.toString());
+        } else {
+            const tokenBalance = await ERC20Contract.balanceOf(account);
+            setTokenBalance(tokenBalance.toString());
+        }
+    };
+    useEffect(() => {
+        getBalance();
+    }, [account]);
+
+    return { nativeBalance, tokenBalance, getBalance };
+};
