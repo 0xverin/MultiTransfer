@@ -78,7 +78,7 @@ export const useTransferGasFee = ({ token, isApproved, amount, toAddressList, al
                 console.log(toAddressList);
                 console.log(tokenAmount);
 
-                const estimateGas = await TransferInstance.estimateGas.transferEth(toAddressList, tokenAmount, {
+                const estimateGas = await TransferInstance.estimateGas.transferETH(toAddressList, tokenAmount, {
                     value: accAdd(allAmount, fee),
                 });
 

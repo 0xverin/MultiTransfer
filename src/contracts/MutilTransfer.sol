@@ -373,9 +373,9 @@ library SafeMath {
 contract MutilTransfer is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
-    uint256 public fee = 0; //fee
+    uint256 public fee = 0;
 
-    function transferEth(address payable[] memory to, uint256 amount)
+    function transferETH(address payable[] memory to, uint256 amount)
         public
         payable
     {
@@ -391,7 +391,7 @@ contract MutilTransfer is Ownable {
         }
     }
 
-    function transferProEth(
+    function transferMultiETH(
         address payable[] memory to,
         uint256[] memory amount
     ) public payable {
@@ -422,7 +422,7 @@ contract MutilTransfer is Ownable {
         }
     }
 
-    function transferProToken(
+    function transferMultiToken(
         address _token,
         address[] memory to,
         uint256[] memory amount

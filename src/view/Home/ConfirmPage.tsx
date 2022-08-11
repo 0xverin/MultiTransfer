@@ -70,7 +70,7 @@ export default function ConfirmPage(props: ConfirmProps) {
             let tx;
 
             if (isEth(token, chainId)) {
-                tx = await TransferInstance.transferEth(addressList, tokenAmount.toString(), {
+                tx = await TransferInstance.transferETH(addressList, tokenAmount.toString(), {
                     value: accAdd(allAmount, fee),
                 });
             } else {
@@ -94,7 +94,6 @@ export default function ConfirmPage(props: ConfirmProps) {
         }
     };
     const handleApproval = async () => {
-        console.log(ERC20Instarnce);
         setLoading(true);
 
         try {

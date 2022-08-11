@@ -35,16 +35,9 @@
             { "internalType": "address payable[]", "name": "to", "type": "address[]" },
             { "internalType": "uint256", "name": "amount", "type": "uint256" }
         ],
-        "name": "transferEth",
+        "name": "transferETH",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -52,7 +45,7 @@
             { "internalType": "address payable[]", "name": "to", "type": "address[]" },
             { "internalType": "uint256[]", "name": "amount", "type": "uint256[]" }
         ],
-        "name": "transferProEth",
+        "name": "transferMultiETH",
         "outputs": [],
         "stateMutability": "payable",
         "type": "function"
@@ -63,9 +56,16 @@
             { "internalType": "address[]", "name": "to", "type": "address[]" },
             { "internalType": "uint256[]", "name": "amount", "type": "uint256[]" }
         ],
-        "name": "transferProToken",
+        "name": "transferMultiToken",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
