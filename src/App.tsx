@@ -1,11 +1,12 @@
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { Web3Provider } from "@ethersproject/providers";
-import { Web3ReactProvider, createWeb3ReactRoot } from "@web3-react/core";
+import Footer from "@/components/Footer/index";
 import Web3ReactManager from "@/components/Web3ReactManager/index";
 import { NetworkContextName } from "@/config";
+import { Web3Provider } from "@ethersproject/providers";
+import { createWeb3ReactRoot, Web3ReactProvider } from "@web3-react/core";
+import { HashRouter as Router, Route } from "react-router-dom";
 
-import Home from "@/view/Home";
 import Header from "@/components/Header/index";
+import Home from "@/view/Home";
 export function getLibrary(provider: any): Web3Provider {
     const library = new Web3Provider(provider);
     library.pollingInterval = 15000;
@@ -23,6 +24,7 @@ function App() {
                     <Web3ReactManager>
                         <Route path="/" exact component={Home} />
                     </Web3ReactManager>
+                    <Footer></Footer>
                 </Router>
             </Web3ProviderNetwork>
         </Web3ReactProvider>

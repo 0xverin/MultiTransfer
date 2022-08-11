@@ -11,7 +11,6 @@ import { createContext, useEffect, useMemo, useState } from "react";
 import AddressList from "./AddressList";
 import ConfirmPage from "./ConfirmPage";
 import SelectToken from "./SelectToken";
-
 export const Context = createContext<any>({ confirm, setConfirm: () => {} });
 
 export default function Home() {

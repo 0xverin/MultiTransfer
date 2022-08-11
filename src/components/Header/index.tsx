@@ -40,12 +40,14 @@ const contractlist = [
     },
 ];
 export default function Header() {
-    const { account, activate, chainId, deactivate, active } = useActiveWeb3React();
+    const { account, activate, chainId, deactivate, active, error } = useActiveWeb3React();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
+    console.log(chainId, 333333, error, active, account);
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -68,7 +70,7 @@ export default function Header() {
                         }}
                     >
                         <img src={arrow} alt="" />
-                        合约地址（开源）
+                        合约地址
                     </Button>
 
                     <Menu
@@ -96,10 +98,15 @@ export default function Header() {
                     </Menu>
                 </div>
                 <div className="w-1/2 flex items-center justify-end">
-                    <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
-                        {NETWORK_LABEL[chainId]}
-                    </div>
-                    <img src={NETWORK_ICON[chainId]} alt="" width={32} className="rounded-[50px] mr-5" />
+                    {account && (
+                        <div>
+                            <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
+                                {NETWORK_LABEL[chainId]}
+                            </div>
+                            <img src={NETWORK_ICON[chainId]} alt="" width={32} className="rounded-[50px] mr-5" />
+                        </div>
+                    )}
+
                     <div
                         className="m-w-[150px] px-5 h-14 rounded-xl bg-[#01385A] flex items-center justify-center text-white font-bold text-lg hover:cursor-pointer"
                         onClick={() => {
@@ -109,7 +116,7 @@ export default function Header() {
                                 })
                                 .catch((error) => {
                                     if (error instanceof UnsupportedChainIdError) {
-                                        toast.error("UnsupportedChainId", {
+                                        toast.error("Unsupported ChainId", {
                                             position: toast.POSITION.TOP_LEFT,
                                             theme: "colored",
                                         });
