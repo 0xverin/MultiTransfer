@@ -25,7 +25,7 @@ export default function Footer() {
                     </div> */}
                 </div>
                 <div className="w-1/2 ">
-                    <div className="text-[#01385A] font-bold">相关地址：</div>
+                    <div className="text-[#01385A] font-bold">相关链接（欢迎大家来github点一个star）</div>
                     <div className="flex mt-10">
                         <img
                             src={github}
