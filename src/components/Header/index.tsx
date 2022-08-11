@@ -55,7 +55,7 @@ export default function Header() {
         <div className="w-full h-[60px] shadow-md flex justify-center items-center">
             <div className="h-full w-11/12 md:w-7/12 flex item-center justify-between">
                 <div className="w-1/2 h-full  flex items-center">
-                    <img src={logo} alt="" width="35" />
+                    <img src={logo} alt="批量转账" width="35" />
                     <Button
                         id="basic-button"
                         aria-controls={open ? "basic-menu" : undefined}
@@ -68,7 +68,7 @@ export default function Header() {
                             color: "#01385A",
                         }}
                     >
-                        <img src={arrow} alt="" />
+                        <img src={arrow} alt="erc20转账" />
                         合约地址
                     </Button>
 
@@ -102,7 +102,12 @@ export default function Header() {
                             <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
                                 {NETWORK_LABEL[chainId]}
                             </div>
-                            <img src={NETWORK_ICON[chainId]} alt="" width={32} className="rounded-[50px] mr-5" />
+                            <img
+                                src={NETWORK_ICON[chainId]}
+                                alt="erc20转账"
+                                width={32}
+                                className="rounded-[50px] mr-5"
+                            />
                         </div>
                     )}
 

@@ -329,7 +329,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                         setConfirm(false);
                     }}
                 >
-                    <img src={backIcon} alt="" className="w-full h-4/5" />
+                    <img src={backIcon} alt="批量转账" className="w-full h-4/5" />
                 </Button>
                 <div className="ml-10">
                     {isApproved ? (

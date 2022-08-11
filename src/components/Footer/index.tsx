@@ -29,7 +29,7 @@ export default function Footer() {
                     <div className="flex mt-10">
                         <img
                             src={github}
-                            alt=""
+                            alt="github"
                             className="hover:cursor-pointer"
                             onClick={() => {
                                 window.open("https://github.com/Verin1005", "_blank");
@@ -37,7 +37,7 @@ export default function Footer() {
                         />
                         <img
                             src={telegram}
-                            alt=""
+                            alt="telegram"
                             className="hover:cursor-pointer ml-10"
                             onClick={() => {
                                 window.open("https://t.me/daqingchong", "_blank");
@@ -45,7 +45,7 @@ export default function Footer() {
                         />
                         <img
                             src={discord}
-                            alt=""
+                            alt="discord"
                             className="hover:cursor-pointer ml-10"
                             onClick={() => {
                                 window.open("https://discord.com/users/973583783422988288", "_blank");
