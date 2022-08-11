@@ -96,9 +96,9 @@ export default function Header() {
                         ))}
                     </Menu>
                 </div>
-                <div className="w-1/2 flex items-center justify-end">
+                <div className="w-1/2 flex items-center justify-end ">
                     {account && (
-                        <div>
+                        <div className="flex items-center">
                             <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
                                 {NETWORK_LABEL[chainId]}
                             </div>
@@ -127,7 +127,7 @@ export default function Header() {
                     >
                         <span className="hidden sm:block">{account ? formatAddress(account) : "Connect"}</span>
 
-                        <span className="block sm:hidden text-[10px]">
+                        <span className="block sm:hidden text-[10px] ">
                             {account ? "..." + account.slice(-4) : "Connect"}
                         </span>
 
