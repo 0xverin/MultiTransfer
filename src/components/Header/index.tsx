@@ -40,13 +40,12 @@ const contractlist = [
     },
 ];
 export default function Header() {
-    const { account, activate, chainId, deactivate, active, error } = useActiveWeb3React();
+    const { account, activate, chainId, deactivate, active } = useActiveWeb3React();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
-    console.log(chainId, 333333, error, active, account);
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -115,6 +114,8 @@ export default function Header() {
                                     localStorage.setItem(connectorLocalStorageKey, "injected");
                                 })
                                 .catch((error) => {
+                                    console.log(error);
+
                                     if (error instanceof UnsupportedChainIdError) {
                                         toast.error("Unsupported ChainId", {
                                             position: toast.POSITION.TOP_LEFT,
@@ -125,6 +126,7 @@ export default function Header() {
                         }}
                     >
                         <span className="hidden sm:block">{account ? formatAddress(account) : "Connect"}</span>
+
                         <span className="block sm:hidden text-[10px]">
                             {account ? "..." + account.slice(-4) : "Connect"}
                         </span>
