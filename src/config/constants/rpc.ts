@@ -6,7 +6,7 @@ const RPC = {
     // [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
     [ChainId.ROPSTEN]: "https://ropsten.infura.io/v3/c7bae63096c74b3dad54ad7ae275df0c",
     [ChainId.RINKEBY]: "https://eth-rinkeby.alchemyapi.io/v2/TWCO2XsIVDteeZA6WcmHPWmMowK6SDTD",
-    [ChainId.GÖRLI]: "https://eth-goerli.g.alchemy.com/v2/cihv7vmXh20-FLOy9gUP69NpU_p9jpRh",
+    [ChainId.GOERLI]: "https://eth-goerli.g.alchemy.com/v2/cihv7vmXh20-FLOy9gUP69NpU_p9jpRh",
     [ChainId.KOVAN]: "https://kovan.infura.io/v3/c7bae63096c74b3dad54ad7ae275df0c",
     //   [ChainId.FANTOM]: "https://rpcapi.fantom.network",
     //   [ChainId.FANTOM_TESTNET]: "https://rpc.testnet.fantom.network",
