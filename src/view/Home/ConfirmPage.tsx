@@ -1,12 +1,13 @@
 import backIcon from "@/assets/back.svg";
 import nodataIcon from "@/assets/nodata.svg";
-
+import { NATIVE } from "@/config/constants/native";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
-import { useTransfer } from "@/hooks/useContract";
+import { useERC20, useTransfer } from "@/hooks/useContract";
 import { useAllowance, useBalance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
 import { getMultiTransferAddress } from "@/utils/contractAddressHelper";
 import { accAdd, accMul, formatAmount, formatBalance, parseAmount } from "@/utils/format";
 import { isEth } from "@/utils/isEth";
+import { MaxUint256 } from "@ethersproject/constants";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
@@ -28,7 +29,7 @@ interface ConfirmProps {
 export default function ConfirmPage(props: ConfirmProps) {
     const { addressList, delAddressList, sendValue, token, tokenList } = props;
     let { confirm, setConfirm } = useContext(Context);
-
+    const ERC20Instarnce = useERC20(token.address);
     const { chainId, library, account } = useActiveWeb3React();
     const { nativeBalance, tokenBalance, getBalance } = useBalance(token, account);
 
@@ -60,6 +61,60 @@ export default function ConfirmPage(props: ConfirmProps) {
         setTableData(newArr);
     };
 
+    const handleTransfer = async () => {
+        try {
+            setLoading(true);
+
+            const tokenAmount = parseAmount(sendValue, token.decimals);
+            const allAmount = accMul(parseAmount(sendValue, token.decimals), addressList.length);
+            let tx;
+
+            if (isEth(token, chainId)) {
+                tx = await TransferInstance.transferEth(addressList, tokenAmount.toString(), {
+                    value: accAdd(allAmount, fee),
+                });
+            } else {
+                tx = await TransferInstance.transferToken(token.address, addressList, tokenAmount.toString(), {
+                    value: fee,
+                });
+            }
+            await tx.wait();
+            setLoading(false);
+            toast.success("Transfer Success", {
+                position: toast.POSITION.TOP_LEFT,
+                theme: "colored",
+            });
+            getBalance();
+        } catch (error) {
+            toast.error(error.reason || error.data?.message || error.message, {
+                position: toast.POSITION.TOP_LEFT,
+                theme: "colored",
+            });
+            setLoading(false);
+        }
+    };
+    const handleApproval = async () => {
+        console.log(ERC20Instarnce);
+        setLoading(true);
+
+        try {
+            const tx = await ERC20Instarnce.approve(getMultiTransferAddress(chainId), MaxUint256);
+            await tx.wait();
+            setLoading(false);
+            toast.success("Approve Success", {
+                position: toast.POSITION.TOP_LEFT,
+                theme: "colored",
+            });
+            getAllowance();
+            getBalance();
+        } catch (error) {
+            toast.error(error.reason || error.data?.message || error.message, {
+                position: toast.POSITION.TOP_LEFT,
+                theme: "colored",
+            });
+            setLoading(false);
+        }
+    };
     useEffect(() => {
         initArray();
     }, [addressList]);
@@ -244,7 +299,7 @@ export default function ConfirmPage(props: ConfirmProps) {
                             <div className="flex items-center justify-center text-gray-400 text-[10px] sm:text-[14px]">
                                 预估消耗
                                 <span className="text-red-600 font-bold">
-                                    （含手续费 {formatAmount(fee)} {token.symbol}）
+                                    （含手续费 {formatAmount(fee)} {NATIVE[chainId].symbol}）
                                 </span>
                             </div>
                         </div>
@@ -284,55 +339,25 @@ export default function ConfirmPage(props: ConfirmProps) {
                             loading={loading}
                             loadingPosition="start"
                             className="w-32 h-12"
-                            onClick={async () => {
-                                try {
-                                    setLoading(true);
-
-                                    const tokenAmount = parseAmount(sendValue, token.decimals);
-                                    const allAmount = accMul(
-                                        parseAmount(sendValue, token.decimals),
-                                        addressList.length,
-                                    );
-                                    let tx;
-
-                                    if (isEth(token, chainId)) {
-                                        tx = await TransferInstance.transferEth(addressList, tokenAmount.toString(), {
-                                            value: accAdd(allAmount, fee),
-                                        });
-                                    } else {
-                                        tx = await TransferInstance.transferToken(
-                                            token.address,
-                                            addressList,
-                                            tokenAmount.toString(),
-                                            {
-                                                value: fee,
-                                            },
-                                        );
-                                    }
-                                    await tx.wait();
-                                    setLoading(false);
-                                    toast.success("Transfer Success", {
-                                        position: toast.POSITION.TOP_LEFT,
-                                        theme: "colored",
-                                    });
-                                    getBalance();
-                                } catch (error) {
-                                    setLoading(false);
-                                }
+                            onClick={() => {
+                                handleTransfer();
                             }}
                         >
                             发送
                         </LoadingButton>
                     ) : (
-                        <Button
+                        <LoadingButton
                             variant="contained"
                             className="w-32 h-12"
+                            loading={loading}
+                            loadingPosition="start"
                             onClick={() => {
                                 // setConfirm(true);
+                                handleApproval();
                             }}
                         >
                             授权
-                        </Button>
+                        </LoadingButton>
                     )}
                 </div>
             </div>
