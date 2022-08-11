@@ -1,6 +1,7 @@
 import arrow from "@/assets/arrow.svg";
 import logo from "@/assets/logo.svg";
 import { connectorLocalStorageKey } from "@/config/connectors/index";
+import { NETWORK_ICON, NETWORK_LABEL } from "@/config/constants/chainIcon";
 import { injected } from "@/config/constants/wallets";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { formatAddress } from "@/utils/format";
@@ -39,7 +40,7 @@ const contractlist = [
     },
 ];
 export default function Header() {
-    const { account, activate } = useActiveWeb3React();
+    const { account, activate, chainId, deactivate, active } = useActiveWeb3React();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,7 +54,7 @@ export default function Header() {
         <div className="w-full h-[60px] shadow-md flex justify-center items-center">
             <div className="h-full w-11/12 md:w-7/12 flex item-center justify-between">
                 <div className="w-1/2 h-full  flex items-center">
-                    <img src={logo} alt="" />
+                    <img src={logo} alt="" width="35" />
                     <Button
                         id="basic-button"
                         aria-controls={open ? "basic-menu" : undefined}
@@ -67,7 +68,7 @@ export default function Header() {
                         }}
                     >
                         <img src={arrow} alt="" />
-                        合约地址
+                        合约地址（开源）
                     </Button>
 
                     <Menu
@@ -94,24 +95,44 @@ export default function Header() {
                         ))}
                     </Menu>
                 </div>
-                <div
-                    className="w-[150px] h-14 rounded-xl bg-[#00A5DA] flex items-center justify-center text-white font-bold text-lg hover:cursor-pointer"
-                    onClick={() => {
-                        activate(injected, undefined, true)
-                            .then(() => {
-                                localStorage.setItem(connectorLocalStorageKey, "injected");
-                            })
-                            .catch((error) => {
-                                if (error instanceof UnsupportedChainIdError) {
-                                    toast.error("UnsupportedChainId", {
-                                        position: toast.POSITION.TOP_LEFT,
-                                        theme: "colored",
-                                    });
-                                }
-                            });
-                    }}
-                >
-                    {account ? formatAddress(account) : "Connect"}
+                <div className="w-1/2 flex items-center justify-end">
+                    <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
+                        {NETWORK_LABEL[chainId]}
+                    </div>
+                    <img src={NETWORK_ICON[chainId]} alt="" width={32} className="rounded-[50px] mr-5" />
+                    <div
+                        className="m-w-[150px] px-5 h-14 rounded-xl bg-[#01385A] flex items-center justify-center text-white font-bold text-lg hover:cursor-pointer"
+                        onClick={() => {
+                            activate(injected, undefined, true)
+                                .then(() => {
+                                    localStorage.setItem(connectorLocalStorageKey, "injected");
+                                })
+                                .catch((error) => {
+                                    if (error instanceof UnsupportedChainIdError) {
+                                        toast.error("UnsupportedChainId", {
+                                            position: toast.POSITION.TOP_LEFT,
+                                            theme: "colored",
+                                        });
+                                    }
+                                });
+                        }}
+                    >
+                        <span className="hidden sm:block">{account ? formatAddress(account) : "Connect"}</span>
+                        <span className="block sm:hidden text-[10px]">
+                            {account ? "..." + account.slice(-4) : "Connect"}
+                        </span>
+
+                        {account && (
+                            <span
+                                className="ml-5 hover:cursor-pointer text-red-300 hidden  sm:block "
+                                onClick={() => {
+                                    deactivate();
+                                }}
+                            >
+                                断开
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
