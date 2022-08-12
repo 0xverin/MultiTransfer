@@ -1,6 +1,7 @@
 import backIcon from "@/assets/back.svg";
 import nodataIcon from "@/assets/nodata.svg";
 import { NATIVE } from "@/config/constants/native";
+import { Token } from "@/config/constants/types";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { useERC20, useTransfer } from "@/hooks/useContract";
 import { useAllowance, useBalance, useTransferFee, useTransferGasFee } from "@/hooks/useTransfer";
@@ -23,7 +24,7 @@ interface ConfirmProps {
     tableData: Array<{ address: string; amount: number; id: number }>;
     delAddressList: (id: number) => void;
     sendValue: string;
-    token: any;
+    token: Token;
     tokenList: Array<any>;
 }
 export default function ConfirmPage(props: ConfirmProps) {
