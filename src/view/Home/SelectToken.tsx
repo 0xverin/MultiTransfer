@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
+import { Token } from "@/config/constants/types";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Token } from "@/config/constants/types";
+import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 
 interface propsInter {
     tokenList: Array<any>;
@@ -24,7 +24,7 @@ export default function SelectToken(props: propsInter) {
 
     return (
         <div>
-            <div className="text-[#031a6e] text-[16px]">选择代币</div>
+            <div className="text-[#031a6e] text-[16px]">选择代币或输入代币地址查询</div>
             <Autocomplete
                 id="asynchronous-demo"
                 disableClearable
