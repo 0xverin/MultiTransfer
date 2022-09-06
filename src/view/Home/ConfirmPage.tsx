@@ -56,7 +56,7 @@ export default function ConfirmPage(props: ConfirmProps) {
             newArr.push({
                 id: i + 1,
                 address: arr[i],
-                amount: 1,
+                amount: sendValue,
             });
         }
         setTableData(newArr);
