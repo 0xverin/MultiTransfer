@@ -1,7 +1,7 @@
 import arrow from "@/assets/arrow.svg";
 import logo from "@/assets/logo.svg";
 import { connectorLocalStorageKey } from "@/config/connectors/index";
-import { NETWORK_ICON, NETWORK_LABEL } from "@/config/constants/chainIcon";
+import { NETWORK_LABEL } from "@/config/constants/chainIcon";
 import { injected } from "@/config/constants/wallets";
 import { useActiveWeb3React } from "@/hooks/useActiveWeb3React";
 import { formatAddress } from "@/utils/format";
@@ -102,12 +102,12 @@ export default function Header() {
                             <div className="text-[#01385A] text-[14px] font-bold mr-5 hidden sm:block">
                                 {NETWORK_LABEL[chainId]}
                             </div>
-                            <img
+                            {/* <img
                                 src={NETWORK_ICON[chainId]}
                                 alt="erc20转账"
                                 width={32}
                                 className="rounded-[50px] mr-5"
-                            />
+                            /> */}
                         </div>
                     )}
 
